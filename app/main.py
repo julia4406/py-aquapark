@@ -8,15 +8,16 @@ class IntegerRange:
         self.max_amount = max_amount
 
     def __set_name__(self, owner: type, name: str) -> None:
-        self.public_name = name
         self.protected_name = "_" + name
 
     def __get__(self, instance: object, owner: type) -> None:
-        getattr(instance, self.protected_name)
+        return getattr(instance, self.protected_name)
 
     def __set__(self, instance: object, value: int) -> None:
+        if not isinstance(value, int):
+            raise TypeError("Value should be integer!")
         if not self.min_amount <= value <= self.max_amount:
-            raise ValueError
+            raise ValueError("Value is out of allowed range!")
         setattr(instance, self.protected_name, value)
 
 
